@@ -112,3 +112,40 @@ select dept_name from departments
 select *from employees
 	right join departments
     on departments.dept_id= employees.dept_id
+select e.emp_name, ep.project_id, p.project_name
+	from employees e
+	inner join employee_projects ep
+    on e.emp_id=ep.emp_id
+    inner join projects p
+    on ep.project_id=p.project_id;
+select e.emp_name,d.dept_name,p.project_name,ep.hours_worked
+	from employees e
+    inner join departments d
+    on e.dept_id=d.dept_id
+    inner join projects p
+    on d.dept_id=p.dept_id
+    inner join employee_projects ep
+    on p.project_id = ep.project_id;
+ select e.emp_name , p.project_name
+	from employees e
+	inner join employee_projects ep
+    on e.emp_id=ep.emp_id
+	inner join projects p
+    on ep.project_id=p.project_id
+    where project_name=(select project_name 	
+		from projects
+		where project_name like 'E-Commerce') ;
+select e.emp_name , p.project_name
+	from employees e
+	inner join employee_projects ep
+    on e.emp_id=ep.emp_id
+	inner join projects p
+    on ep.project_id=p.project_id
+    where p.project_name='E-Commerce';
+select e.emp_name,d.dept_id,d.dept_name
+	from employees e
+    inner join departments d
+    on e.dept_id=d.dept_id
+    inner join projects p
+    on e.dept_id=p.dept_id
+    where d.dept_name='IT';
