@@ -255,3 +255,88 @@ select e.emp_name
     on e.emp_id=ep.emp_id
     inner join projects as p
     on ep.project_id=p.project_id
+select e.emp_name as employees_name
+	from employees e
+    inner join employees m
+    on e.manager_id=m.emp_id
+    where e.salary>m.salary;
+select e.emp_name,p.project_name
+	from employees as e
+    inner join employee_projects as ep
+    on e.emp_id=ep.emp_id
+    inner join projects as p
+    on ep.project_id=p.project_id;
+select e.emp_name,count(*) as Project_count
+	from employees as e
+    inner join employee_projects as ep
+    on e.emp_id=ep.emp_id
+    group by e.emp_name;
+select e.emp_name,count(*) as Project_count
+	from employees as e
+    inner join employee_projects as ep
+    on e.emp_id=ep.emp_id
+    group by ep.project_id;
+select e.emp_name 
+	from employees e
+    inner join employee_projects as ep
+    on e.emp_id=ep.emp_id
+    inner join projects as p
+    on ep.project_id=p.project_id;
+select e.emp_name,
+    SUM(ep.hours_worked) AS total_hours
+		FROM employees e
+	INNER JOIN employee_projects ep
+		ON e.emp_id = ep.emp_id
+	GROUP BY e.emp_id, e.emp_name
+		ORDER BY total_hours DESC
+			LIMIT 1;
+    select d.dept_name ,count(*) as employee_count,avg(e.salary) as average_salary, sum(e.salary) as toatl_salary
+	from employees e
+    inner join departments d
+    on e.dept_id=d.dept_id
+    group by d.dept_name
+    order by sum(e.salary) desc;
+SELECT e.emp_name,
+       d.dept_name,
+       e.salary
+FROM employees e
+INNER JOIN departments d
+    ON e.dept_id = d.dept_id
+WHERE e.salary = (
+    SELECT MAX(e2.salary)
+    FROM employees e2
+    WHERE e2.dept_id = e.dept_id
+);
+select emp_name,dept_name,salary 
+	from (select e.emp_name,d.dept_name,e.salary,		
+			dense_rank() over(partition by d.dept_id order by e.salary desc) as s2
+				from employees e
+					inner join departments d
+                    on e.dept_id=d.dept_id) t
+                    where s2=2;
+select d.dept_name,avg(e.salary) 
+	from employees e
+    inner join departments d
+    on e.dept_id=d.dept_id
+    group by d.dept_id
+    having  avg(e.salary)>(select avg(salary) from employees);
+SELECT e.emp_name, ep.project_id
+FROM employees e
+LEFT JOIN employee_projects ep
+    ON e.emp_id = ep.emp_id
+    where ep.project_id is null;
+SELECT p.project_name
+FROM projects p
+LEFT JOIN employee_projects ep
+    ON p.project_id = ep.project_id
+WHERE ep.emp_id IS NULL;
+select e.emp_name,d.dept_name,m.emp_name,p.project_name,ep.hours_worked
+	from employees e
+    inner join employees m
+    on e.manager_id=m.emp_id
+    inner join departments d
+    on e.dept_id=d.dept_id
+    inner join employee_projects ep
+    on e.emp_id=ep.emp_id
+    inner join projects p
+    on ep.project_id=p.project_id;
